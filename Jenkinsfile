@@ -1,5 +1,7 @@
 // Additional env
 env.DEVMOBILEAPI= 'mobile-api-dev.colmitra.id'
+env.DB_HOST= '147.139.171.35'
+env.DB_DEV= 'iddev_fieldcoll_dashboard'
 
 pipeline {
     agent any
@@ -39,7 +41,11 @@ pipeline {
 				sh """
 				sed -i -e 's/local/development/g' .env.local
 				sed -i -e 's/app_url/$DEVMOBILEAPI/g' .env.local
+				sed -i -e 's/db_name/$DB_DEV/g' .env.local
 				"""
+				withCredentials([ string( credentialsId: 'URL-SERVER', variable: 'serverUrl') ]) {
+					sh "sed -i -e 's/db_host/$serverUrl/g' .env.local"
+				}
 				withDockerRegistry([ credentialsId: 'dockerhub-colmitra', url: "" ]) {
 					sh "docker build -t colmitra/${NEW_IMAGE} ."
 					sh "docker push colmitra/${NEW_IMAGE}"
@@ -76,7 +82,7 @@ pipeline {
 		}
 		stage("Run the new Image as Container") {
 			steps {
-				sh "docker run -d -p 2022:8000 --name=${NAME}-${VERSION} colmitra/${NEW_IMAGE}"
+				sh "docker run -d -p 81:8000 --name=${NAME}-${VERSION} colmitra/${NEW_IMAGE}"
 				sh "docker ps"
 				sh "docker images"
 			}
