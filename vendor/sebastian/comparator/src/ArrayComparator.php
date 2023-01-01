@@ -1,17 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 /*
- * This file is part of the Comparator package.
+ * This file is part of sebastian/comparator.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\Comparator;
+
+use function array_key_exists;
+use function is_array;
+use function sort;
+use function sprintf;
+use function str_replace;
+use function trim;
 
 /**
  * Compares arrays for equality.
+ *
+ * Arrays are equal if they contain the same key-value pairs.
+ * The order of the keys does not matter.
+ * The types of key-value pairs do not matter.
  */
 class ArrayComparator extends Comparator
 {
@@ -29,7 +39,7 @@ class ArrayComparator extends Comparator
     }
 
     /**
-     * Asserts that two values are equal.
+     * Asserts that two arrays are equal.
      *
      * @param mixed $expected     First value to compare
      * @param mixed $actual       Second value to compare
@@ -40,7 +50,7 @@ class ArrayComparator extends Comparator
      *
      * @throws ComparisonFailure
      */
-    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = [])
+    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = [])/*: void*/
     {
         if ($canonicalize) {
             sort($expected);
@@ -110,7 +120,7 @@ class ArrayComparator extends Comparator
         }
 
         $expectedAsString .= ')';
-        $actualAsString   .= ')';
+        $actualAsString .= ')';
 
         if (!$equal) {
             throw new ComparisonFailure(

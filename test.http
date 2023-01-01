@@ -1,0 +1,48 @@
+### HOME
+GET http://127.0.0.1:8082/api/ HTTP/1.1
+
+### TEST
+GET http://127.0.0.1:8082/api/test HTTP/1.1
+
+### LOGIN
+POST http://127.0.0.1:8082/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "sutan fauzansyah",
+    "password": "1234"
+}
+
+### DataCollector
+GET http://127.0.0.1:8082/api/DataCollector HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer 50f8b9fcbb2673fda1926df37b1c1593d362944e
+
+### DataSearch
+GET http://127.0.0.1:8082/api/DataCollector/?search=ariyo HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer 50f8b9fcbb2673fda1926df37b1c1593d362944e
+
+### DataNasabah
+GET http://127.0.0.1:8082/api/DataNasabah/?id_nasabah=48278 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer 50f8b9fcbb2673fda1926df37b1c1593d362944e
+
+### UPDATE ITEM
+PUT http://127.0.0.1:8082/api/UpdateStatus HTTP/1.1
+Authorization: Bearer 8203637e809b66b7a96be6331f9257ff4ed74059
+Content-Type: application/json
+
+{
+    "id_login_collector": "1",
+    "id_nasabah": "1",
+    "id_mitra": "13",
+    "status_visit": "1",
+    "status_bayar": "1",
+    "amcoll": "8719698.00",
+    "tanggal_ptp": "",
+    "catatan": "cek lunas",
+    "lat": "-6.2180016",
+    "lang": "106.8150181,17",
+    "foto": ""
+}
