@@ -1,6 +1,7 @@
 // Additional env
 env.DEVMOBILEAPI= 'mobile-api-dev.colmitra.id'
 env.DB_HOST= '147.139.171.35'
+env.DB_USER= 'developers'
 env.DB_DEV= 'iddev_fieldcoll_dashboard'
 
 pipeline {
@@ -13,6 +14,7 @@ pipeline {
    		NEW_IMAGE = "${NAME}:${VERSION}"
 		PREV_IMAGE = "${NAME}:${currentBuild.previousBuild.number}"
 		PREV_VERSION = "${currentBuild.previousBuild.number}"
+		DB_PW_DEV = credentials('DB-PW-DEV')
  	}
 	stages {
 		stage("Shutting down the previous Container") {
@@ -42,8 +44,10 @@ pipeline {
 				sh """
 				sed -i -e 's/local/development/g' .env.local
 				sed -i -e 's/app_url/$DEVMOBILEAPI/g' .env.local
-				sed -i -e 's/db_name/$DB_DEV/g' .env.local
 				sed -i -e 's/db_host/$HOST/g' .env.local
+				sed -i -e 's/db_name/$DB_DEV/g' .env.local
+				sed -i -e 's/db_user/$DB_USER/g' .env.local
+				sed -i -e 's/db_pass/$DB_PW_DEV/g' .env.local
 				"""
 				withDockerRegistry([ credentialsId: 'dockerhub-colmitra', url: "" ]) {
 					sh "docker build -t colmitra/dev-${NEW_IMAGE} ."
