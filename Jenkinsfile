@@ -43,9 +43,9 @@ pipeline {
 				sed -i -e 's/app_url/$DEVMOBILEAPI/g' .env.local
 				sed -i -e 's/db_name/$DB_DEV/g' .env.local
 				"""
-				withCredentials([ string( credentialsId: 'URL-SERVER', variable: 'serverUrl') ]) {
-					sh "sed -i -e 's/db_host/$serverUrl/g' .env.local"
-				}
+				// withCredentials([ string( credentialsId: 'URL-SERVER', variable: 'serverUrl') ]) {
+				// 	sh "sed -i -e 's/db_host/$serverUrl/g' .env.local"
+				// }
 				withDockerRegistry([ credentialsId: 'dockerhub-colmitra', url: "" ]) {
 					sh "docker build -t colmitra/${NEW_IMAGE} ."
 					sh "docker push colmitra/${NEW_IMAGE}"
