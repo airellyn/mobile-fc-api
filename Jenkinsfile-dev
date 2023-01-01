@@ -8,6 +8,7 @@ pipeline {
 	
   	environment { 
    		NAME = "fc-mobile-api"
+		HOST = credentialsId('URL-SERVER')
    		VERSION = "${env.BUILD_NUMBER}"
    		NEW_IMAGE = "${NAME}:${VERSION}"
 		PREV_IMAGE = "${NAME}:${currentBuild.previousBuild.number}"
@@ -42,13 +43,11 @@ pipeline {
 				sed -i -e 's/local/development/g' .env.local
 				sed -i -e 's/app_url/$DEVMOBILEAPI/g' .env.local
 				sed -i -e 's/db_name/$DB_DEV/g' .env.local
+				sed -i -e 's/db_host/$HOST/g' .env.local
 				"""
-				// withCredentials([ string( credentialsId: 'URL-SERVER', variable: 'serverUrl') ]) {
-				// 	sh "sed -i -e 's/db_host/$serverUrl/g' .env.local"
-				// }
 				withDockerRegistry([ credentialsId: 'dockerhub-colmitra', url: "" ]) {
-					sh "docker build -t colmitra/${NEW_IMAGE} ."
-					sh "docker push colmitra/${NEW_IMAGE}"
+					sh "docker build -t colmitra/dev-${NEW_IMAGE} ."
+					sh "docker push colmitra/dev-${NEW_IMAGE}"
 				}
             }
         }
@@ -56,8 +55,8 @@ pipeline {
 			steps {
 				script {
 					try {
-						def images = sh(returnStdout: true, script: "docker images 'colmitra/$NAME*' --quiet")
-						def imageTags = sh(returnStdout: true, script: "docker images 'colmitra/$NAME*' --format='{{json .Tag}}' | jq --slurp")
+						def images = sh(returnStdout: true, script: "docker images 'colmitra/dev-$NAME*' --quiet")
+						def imageTags = sh(returnStdout: true, script: "docker images 'colmitra/dev-$NAME*' --format='{{json .Tag}}' | jq --slurp")
         				def tags = readJSON text: imageTags
 
 						for (int i = 0; i < tags.size(); i++) {
@@ -66,8 +65,8 @@ pipeline {
 							thisBuild = VERSION.toInteger()
 							
 							if (newtag < thisBuild) {
-								sh "docker rmi 'colmitra/$NAME:${tag}' -f"
-								echo "Last image 'colmitra/$NAME:${tag}' has been removed successfully."
+								sh "docker rmi 'colmitra/dev-$NAME:${tag}' -f"
+								echo "Last image 'colmitra/dev-$NAME:${tag}' has been removed successfully."
 								sh "docker images"
 							} else {
 								echo 'Nothing to remove, there are no previous image.'
@@ -82,7 +81,7 @@ pipeline {
 		}
 		stage("Run the new Image as Container") {
 			steps {
-				sh "docker run -d -p 81:8000 --name=${NAME}-${VERSION} colmitra/${NEW_IMAGE}"
+				sh "docker run -d -p 81:8000 --name=${NAME}-${VERSION} colmitra/dev-${NEW_IMAGE}"
 				sh "docker ps"
 				sh "docker images"
 			}
