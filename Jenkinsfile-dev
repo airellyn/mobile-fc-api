@@ -8,7 +8,7 @@ pipeline {
 	
   	environment { 
    		NAME = "fc-mobile-api"
-		HOST = credentialsId('URL-SERVER')
+		HOST = credentials('URL-SERVER')
    		VERSION = "${env.BUILD_NUMBER}"
    		NEW_IMAGE = "${NAME}:${VERSION}"
 		PREV_IMAGE = "${NAME}:${currentBuild.previousBuild.number}"
