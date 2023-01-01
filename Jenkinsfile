@@ -5,7 +5,7 @@ pipeline {
     agent any
 	
   	environment { 
-   		NAME = "test-project"
+   		NAME = "fc-mobile-api"
    		VERSION = "${env.BUILD_NUMBER}"
    		NEW_IMAGE = "${NAME}:${VERSION}"
 		PREV_IMAGE = "${NAME}:${currentBuild.previousBuild.number}"
