@@ -35,6 +35,9 @@
 
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
+                                    FIELD COLLECTION API
+                                </div>
+                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
                                     PT Colmitra Persada Indonesia &copy 2022.
                                 </div>
                             </div>
