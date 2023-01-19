@@ -23,7 +23,7 @@ use App\Library\Token;
 
 class NasabahController extends Controller
 {
-    public function update_status(Request $request) {
+        public function update_status(Request $request) {
         try{
             Log::error($request->getContent());
             $user = Token::getToken($request->header('Authorization'));
@@ -53,6 +53,12 @@ class NasabahController extends Controller
                 $foto_kwitansi = $json->foto_kwitansi;
             }else{
                 $foto_kwitansi = '';
+            }
+
+	    if(isset($json->foto_jalan)) {
+                $foto_jalan = $json->foto_jalan;
+            }else{
+                $foto_jalan = '';
             }
 	
             if(isset($json->foto)) {
@@ -98,7 +104,7 @@ class NasabahController extends Controller
                 ];
 	            return response($res,422);
             
-            } elseif ($sisa_tagihan > 0) {
+            } else if ($sisa_tagihan > 0) {
                 if($json->amcoll > round($sisa_tagihan) || $sum_amcoll->total_amcoll > round($sisa_tagihan)) {
                     $res = ['status' => false, 'message' => 'Nilai Amcoll yang di isi melebihi sisa tunggakan.'];
                     return response($res,422);
@@ -106,7 +112,7 @@ class NasabahController extends Controller
             }
             /** if $sisa_tagihan == 0 , auto lunas **/
             
-            if((in_array($json->status_visit, [3,4,5,6]))){
+            if((in_array($json->status_visit, [3,4,5,6,7]))){
         		if($json->catatan == '') {
         			$res = ['status' => false, 'message' => 'Catatan tidak boleh kosong'];
 		            return response($res,422);
@@ -124,6 +130,7 @@ class NasabahController extends Controller
                 'tanggal_ptp'   => $json->tanggal_ptp,
                 'catatan'       => $json->catatan,
                 'foto_rumah'    => $foto,
+		'foto_jalan'    => $foto_jalan,
                 'foto_kwitansi' => $foto_kwitansi,
                 'sisa_tagihan'  => round($sisa_tagihan),  //watch this, important!
                 'lat'           => $json->lat,

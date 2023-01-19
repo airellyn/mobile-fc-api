@@ -68,7 +68,7 @@ class UserController extends Controller
                 $res['data'] = $data_login;
                 return response($res);
             }else{
-                // Log::error($e->getMessage());
+               // Log::error($e->getMessage());
                 $res['success'] = false;
                 $res['message'] = 'Username atau password salah!';
                 return response($res,401);
@@ -83,7 +83,7 @@ class UserController extends Controller
             
             $url = Settings::where('name','=','url')->first();
             $collector = Collector::where('ID','=',$user->id_collection)->first();
-            $nasabah = SignNasabah::select('nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','mitra.NAMA as MITRA','nasabah.COMPANY')
+            $nasabah = SignNasabah::select('nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.KELURAHAN')
                                   ->join('nasabah','nasabah.ID','=','sign_nasabah.ID_NASABAH')
                                   ->join('mitra','mitra.ID','=','nasabah.ID_MITRA')
                                   ->where('sign_nasabah.IS_AKTIF','=',0)
@@ -100,7 +100,9 @@ class UserController extends Controller
                 foreach ($nasabah->get() as $cust) {                    
                     if (
                         stripos($cust->NAMA, $keyword) !== false ||
-                        stripos($cust->USER_ID, $keyword) !== false ) {
+                        stripos($cust->USER_ID, $keyword) !== false ||
+			stripos($cust->KECAMATAN, $keyword) !== false ||
+			stripos($cust->KELURAHAN, $keyword) !== false) {
                         $status = 'found';                        
                         array_push($result, $cust);
                     }
@@ -114,7 +116,7 @@ class UserController extends Controller
                 } else {
                     $res = [
                         'failed'    => true,
-                        'message'   => '404: Data not found.'
+                        'message'   => 'Maaf: Data tidak di temukan.'
                     ];
                 }
 
@@ -201,10 +203,10 @@ class UserController extends Controller
                         "USER_ID"=>  $nasabah->USER_ID,
                         "NAMA"=> $nasabah->NAMA,
                         "TELEPHONE"=> $nasabah->TELEPHONE,
-                        "TELEPHONE_RUMAH"=> $nasabah->TELEPHONE_RUMAH,
+                        "TELEPHONE_RUMAH"=> $nasabah->tanggal_lahir,
                         "TELEPHONE_KANTOR"=> $nasabah->TELEPHONE_KANTOR,
                         "ALAMAT"=> $nasabah->ALAMAT_RUMAH,
-                        "ALAMAT_KANTOR"=> $nasabah->ALAMAT_KANTOR,
+                        "ALAMAT_KANTOR"=> $nasabah->alamat_ktp,
                         "TOTAL_TAGIHAN"=> round($nasabah->TOTAL_TAGIHAN-$tot_amcoll),
                         "STATUS_KUNJUNGAN"=>$status_visit,
                         "STATUS_PEMBAYARAN" => $status_bayar,
@@ -216,6 +218,8 @@ class UserController extends Controller
                         "IS_AKTIF"=> $nasabah->IS_AKTIF,
                         "MITRA"=> $nasabah->MITRA,
                         "DPD"=> $nasabah->DPD,
+			"KECAMATAN"=> $nasabah->KECAMATAN,
+			"KELURAHAN"=> $nasabah->KELURAHAN,
                         "VA_BCA" => $nasabah->VA_BCA,
                         "VA_MANDIRI" => $nasabah->VA_MANDIRI,
                         "VA_PERMATA" => $nasabah->VA_PERMATA,
