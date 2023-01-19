@@ -25,6 +25,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        $this->app['auth']->viaRequest('api', function ($request) {
+            /*if ($request->input('api_token')) {
+                return User::where('api_token', $request->input('api_token'))->first();
+            }*/
+            if ($request->header('Authorization')) {
+				$key = explode(' ',$request->header('Authorization'));
+				$user = User::where('api_token', $key[1])->first();
+				if(!empty($user)){
+					$request->request->add(['id' => $user->id]);
+				}
+				return $user;
+			}
+        });
     }
 }
