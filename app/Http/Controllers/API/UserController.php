@@ -1,8 +1,5 @@
 <?php
-
-namespace App\Http\Controllers\API;
-
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +25,7 @@ use App\Library\Token;
 class UserController extends Controller
 {
 	
-	public function login(Request $request) {			
+	function login(Request $request) {			
         $username = strtolower($request->input('username'));
         $password = $request->input('password');
         $login = User::where('username', $username)
@@ -68,7 +65,7 @@ class UserController extends Controller
                 $res['data'] = $data_login;
                 return response($res);
             }else{
-               // Log::error($e->getMessage());
+                Log::error($e->getMessage());
                 $res['success'] = false;
                 $res['message'] = 'Username atau password salah!';
                 return response($res,401);
@@ -76,14 +73,14 @@ class UserController extends Controller
         }
     }
     
-    public function data_collector(Request $request) {
+    function data_collector(Request $request) {
         try {
             $keyword = $request->get('search');
             $user = Token::getToken($request->header('Authorization'));
             
             $url = Settings::where('name','=','url')->first();
             $collector = Collector::where('ID','=',$user->id_collection)->first();
-            $nasabah = SignNasabah::select('nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.KELURAHAN')
+            $nasabah = SignNasabah::select('nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.KELURAHAN','nasabah.UPDATED_AT')
                                   ->join('nasabah','nasabah.ID','=','sign_nasabah.ID_NASABAH')
                                   ->join('mitra','mitra.ID','=','nasabah.ID_MITRA')
                                   ->where('sign_nasabah.IS_AKTIF','=',0)
@@ -100,9 +97,9 @@ class UserController extends Controller
                 foreach ($nasabah->get() as $cust) {                    
                     if (
                         stripos($cust->NAMA, $keyword) !== false ||
-                        stripos($cust->USER_ID, $keyword) !== false ||
-			stripos($cust->KECAMATAN, $keyword) !== false ||
-			stripos($cust->KELURAHAN, $keyword) !== false) {
+                        stripos($cust->USER_ID, $keyword) !== false || 
+                        stripos($cust->KECAMATAN, $keyword) !== false || 
+                        stripos($cust->KELURAHAN, $keyword) !== false ) {
                         $status = 'found';                        
                         array_push($result, $cust);
                     }
@@ -116,7 +113,7 @@ class UserController extends Controller
                 } else {
                     $res = [
                         'failed'    => true,
-                        'message'   => 'Maaf: Data tidak di temukan.'
+                        'message'   => 'Data Tidak Di Temukan.'
                     ];
                 }
 
@@ -143,7 +140,7 @@ class UserController extends Controller
         }
     }
 
-    public function data_nasabah(Request $request) {
+    function data_nasabah(Request $request) {
         try{
             $data_nasabah = array();
             $user = Token::getToken($request->header('Authorization'));
@@ -206,7 +203,8 @@ class UserController extends Controller
                         "TELEPHONE_RUMAH"=> $nasabah->tanggal_lahir,
                         "TELEPHONE_KANTOR"=> $nasabah->TELEPHONE_KANTOR,
                         "ALAMAT"=> $nasabah->ALAMAT_RUMAH,
-                        "ALAMAT_KANTOR"=> $nasabah->alamat_ktp,
+                        "ALAMAT_KTP"=> $nasabah->alamat_ktp,
+                        "ALAMAT_KANTOR"=> $nasabah->ALAMAT_KANTOR,
                         "TOTAL_TAGIHAN"=> round($nasabah->TOTAL_TAGIHAN-$tot_amcoll),
                         "STATUS_KUNJUNGAN"=>$status_visit,
                         "STATUS_PEMBAYARAN" => $status_bayar,
@@ -218,8 +216,8 @@ class UserController extends Controller
                         "IS_AKTIF"=> $nasabah->IS_AKTIF,
                         "MITRA"=> $nasabah->MITRA,
                         "DPD"=> $nasabah->DPD,
-			"KECAMATAN"=> $nasabah->KECAMATAN,
-			"KELURAHAN"=> $nasabah->KELURAHAN,
+                        "KECAMATAN"=> $nasabah->KECAMATAN, // sumber database untuk apps
+                        "KELURAHAN"=> $nasabah->KELURAHAN,
                         "VA_BCA" => $nasabah->VA_BCA,
                         "VA_MANDIRI" => $nasabah->VA_MANDIRI,
                         "VA_PERMATA" => $nasabah->VA_PERMATA,
