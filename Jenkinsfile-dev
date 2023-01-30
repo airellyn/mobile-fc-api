@@ -1,8 +1,8 @@
 // Additional env
 env.DEVMOBILEAPI= 'mobile-api-dev.colmitra.id'
 env.DB_HOST= '147.139.171.35'
-env.DB_USER= 'developers'
-env.DB_DEV= 'iddev_fieldcoll_dashboard'
+env.DB_USER= 'cpi'
+env.DB_DEV= 'penagihan1'
 
 pipeline {
     agent any
@@ -14,7 +14,7 @@ pipeline {
    		NEW_IMAGE = "${NAME}:${VERSION}"
 		PREV_IMAGE = "${NAME}:${currentBuild.previousBuild.number}"
 		PREV_VERSION = "${currentBuild.previousBuild.number}"
-		DB_PW_DEV = credentials('DB-PW-DEV')
+		DB_PW_DEV = credentials('DB-PW-DEV-FC-DASHBOARD')
  	}
 	stages {
 		stage("Shutting down the previous Container") {
