@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\TestController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\NasabahController;
+use App\Http\Controllers\API\FileUploadController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
