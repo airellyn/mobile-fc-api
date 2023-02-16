@@ -26,9 +26,10 @@ Route::get('/', function () {
     return response($res);
 });
 
-Route::get('test', [TestController::class, 'login']);
+//Route::get('test', [TestController::class, 'login']);
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/DataCollector', [UserController::class, 'data_collector']);
 Route::get('/DataCollector/?search={name}', [UserController::class, 'data_search']);
 Route::get('/DataNasabah', [UserController::class, 'data_nasabah']);
 Route::post('/UpdateStatus', [NasabahController::class, 'update_status']);
+Route::post('/FileUpload', [FileUploadController::class, 'FileUpload']);
