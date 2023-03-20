@@ -1,7 +1,6 @@
-<?php
-namespace App\Http\Controllers\API;
+<?php 
 
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +41,6 @@ class NasabahController extends Controller
 
             $sisa_tagihan = 0;
             $total_amcoll = 0;
-
             if (empty($sum_amcoll->total_amcoll) || $sum_amcoll->total_amcoll == 0){
                 $sisa_tagihan = $nasabah->TOTAL_TAGIHAN - $json->amcoll;
                 $total_amcoll = $json->amcoll;
@@ -50,16 +48,13 @@ class NasabahController extends Controller
                 $total_amcoll = $json->amcoll + $sum_amcoll->total_amcoll;
                 $sisa_tagihan = $nasabah->TOTAL_TAGIHAN - $total_amcoll;
             }
-
-
-            //Start FOTO
             if(isset($json->foto_kwitansi)) {
                 $foto_kwitansi = $json->foto_kwitansi;
             }else{
                 $foto_kwitansi = '';
             }
 
-            if(isset($json->foto_jalan)) {
+	    if(isset($json->foto_jalan)) {
                 $foto_jalan = $json->foto_jalan;
             }else{
                 $foto_jalan = '';
@@ -70,32 +65,18 @@ class NasabahController extends Controller
             }else{
                 $foto = '';
             }
-            // End FOTO
-
-            // STATUS VISIT 1 = BAYAR                           STATUS BAYAR 1 = BAYAR FULL
-            // STATUS VISIT 2 = Janji Bayar / PTP               STATUS BAYAR 2 = PTP
-            // STATUS VISIT 3 = Titip Pesan                     STATUS BAYAR 3 = BAYAR SEBAGIAN
-            // STATUS VISIT 4 = Menolak Membayar
-            // STATUS VISIT 5 = Meninggal Dunia
-            // STATUS VISIT 6 =  Dugaan Penipuan
-            // STATUS VISIT 7 = Meninggal Dunia
             
 			if ($json->status_visit == '') {
-				$res = ['status' => false, 'message' => 'Status tidak boleh kosong!!'];
+				$res = ['status' => false, 'message' => 'Status tidak boleh kosong!'];
 	            return response($res,422);
             }
 
-
-            //////////////// PTP //////////////
-
-            //janji bayar atau status bayar PTP
             if (($json->status_visit == 2)||($json->status_bayar == 2)) {
                 if($json->tanggal_ptp == ''){
                     $res = ['status' => false, 'message' => 'Tanggal PTP tidak boleh kosong!'];
                     return response($res,422);
                 }
             }
-            //janji bayar dan status bayar bukan PTP
             if(($json->status_visit == 2)&&($json->status_bayar != 2)) {
                 $res = ['status' => false, 'message' => 'Metode Pembayaran harus diisi Janji Bayar/PTP'];
                 return response($res,422);
@@ -105,26 +86,16 @@ class NasabahController extends Controller
                 return response($res,422);
             }
 
-            //////////////// BAYAR //////////////
-
-            //status visit bayar dan status bayar PTP
-            // if(($json->foto_kwitansi != '')&&($json->status_bayar == '')) {
-            //     $res = ['status' => false, 'message' => 'Status kunjungan harap di isi Bayar'];
-            //     return response($res,422);
-            // }
-
             if(($json->status_visit == 1)&&($json->status_bayar == 2)) {
                 $res = ['status' => false, 'message' => 'Metode Pembayaran harus diisi Bayar Full/Bayar Sebagian'];
                 return response($res,422);
             }
-            
-            //status visit bayar dan status amcol kosong
             if(($json->status_visit == 1)&&($json->amcoll == '')) {
                 $res = ['status' => false, 'message' => 'Amcoll tidak boleh kosong!'];
                 return response($res,422);
             }
-
-            if(($json->status_visit == 7)&&($json->foto_jalan == '')) {
+		
+		if(($json->status_visit == 7)&&($json->foto_jalan == '')) {
                 $res = ['status' => false, 'message' => 'Foto Rumah atau Jalan tidak boleh kosong!'];
                 return response($res,422);
             }
@@ -145,7 +116,7 @@ class NasabahController extends Controller
                 return response($res,422);
             }
 
-            if(($json->status_visit == 7)&&($json->foto == '')) {
+	if(($json->status_visit == 7)&&($json->foto == '')) {
                 $res = ['status' => false, 'message' => 'Foto Rumah atau Jalan tidak boleh kosong!'];
                 return response($res,422);
             }
@@ -179,13 +150,8 @@ class NasabahController extends Controller
                     $res = ['status' => false, 'message' => 'Nilai Amcoll yang di isi melebihi sisa tunggakan.'];
                     return response($res,422);
                 }
-            } 
+            }
             /** if $sisa_tagihan == 0 , auto lunas **/
-
-            // if(($sisa_tagihan == $json->amcoll)) {
-            //     $res = ['status' => false, 'message' => 'lunas'];
-            //     return response($res,422);
-            // }
             
             if((in_array($json->status_visit, [3,4,5,6,7]))){
         		if($json->catatan == '') {
@@ -205,7 +171,7 @@ class NasabahController extends Controller
                 'tanggal_ptp'   => $json->tanggal_ptp,
                 'catatan'       => $json->catatan,
                 'foto_rumah'    => $foto,
-                'foto_jalan'    => $foto_jalan,
+		        'foto_jalan'    => $foto_jalan,
                 'foto_kwitansi' => $foto_kwitansi,
                 'sisa_tagihan'  => round($sisa_tagihan),  //watch this, important!
                 'lat'           => $json->lat,
