@@ -1,6 +1,6 @@
 // Additional env
-env.DEVMOBILEAPI= 'mobile-api-dev.colmitra.id'
-env.DB_HOST= '147.139.171.35'
+env.DEVMOBILEAPI= 'fc-mobile-api.colmitra.id'
+env.DB_HOST= '156.67.217.159'
 env.DB_USER= 'cpi'
 env.DB_DEV= 'penagihan1'
 
