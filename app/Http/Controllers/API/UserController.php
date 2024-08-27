@@ -239,7 +239,7 @@ class UserController extends Controller
             //                       ->whereNotIn('nasabah.ID_MITRA', [41])
             //                       ->where('sign_nasabah.ID_COLLECTOR','=',$user->id_collection);
 
-            $nasabah = SignNasabah::select('nasabah.ID_MITRA','nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.TYPE_MOTOR','nasabah.NO_POL','nasabah.TYPE_CREDIT','nasabah.COLL','nasabah.KELUARGA_DEKAT','nasabah.ALAMAT_KELUARGA_DEKAT','nasabah.KONTAK_DARURAT','nasabah.TANGGAL_WO','nasabah.KELURAHAN','nasabah.CREATED_AT')
+            $nasabah = SignNasabah::select('nasabah.TYPE_MOTOR','nasabah.NO_POL','nasabah.LATITUDE','nasabah.LONGITUDE','nasabah.ID_MITRA','nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.TYPE_CREDIT','nasabah.COLL','nasabah.KELUARGA_DEKAT','nasabah.ALAMAT_KELUARGA_DEKAT','nasabah.KONTAK_DARURAT','nasabah.TANGGAL_WO','nasabah.KELURAHAN','nasabah.CREATED_AT')
                                   ->join('nasabah','nasabah.ID','=','sign_nasabah.ID_NASABAH')
                                   ->join('mitra','mitra.ID','=','nasabah.ID_MITRA')
                                   ->where('sign_nasabah.IS_AKTIF','=',0)
@@ -262,7 +262,7 @@ class UserController extends Controller
             //                     ])
             //                     ->where('nasabah.ID_MITRA', [41,42])
                                 ;
-            $nasabah_client = SignNasabah::select('nasabah.ID_MITRA','nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.TYPE_CREDIT','nasabah.COLL','nasabah.KELUARGA_DEKAT','nasabah.ALAMAT_KELUARGA_DEKAT','nasabah.KONTAK_DARURAT','nasabah.TANGGAL_WO','nasabah.KELURAHAN','nasabah.CREATED_AT','nasabah.TYPE_MOTOR','nasabah.NO_POL')
+            $nasabah_client = SignNasabah::select('nasabah.TYPE_MOTOR','nasabah.NO_POL','nasabah.LATITUDE','nasabah.LONGITUDE','nasabah.ID_MITRA','nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.TYPE_CREDIT','nasabah.COLL','nasabah.KELUARGA_DEKAT','nasabah.ALAMAT_KELUARGA_DEKAT','nasabah.KONTAK_DARURAT','nasabah.TANGGAL_WO','nasabah.KELURAHAN','nasabah.CREATED_AT')
                                   ->join('nasabah','nasabah.ID','=','sign_nasabah.ID_NASABAH')
                                   ->join('mitra','mitra.ID','=','nasabah.ID_MITRA')
                                   ->where('sign_nasabah.IS_AKTIF','=',0)
@@ -277,7 +277,7 @@ class UserController extends Controller
                                   ->where('sign_nasabah.ID_COLLECTOR','=',$user->id_collection)
                                   ;
 
-            $hasil_visit = SignNasabah::select('nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','penagihan.STATUS_VISIT as STATUS_VISIT','penagihan.STATUS_BAYAR as STATUS_BAYAR','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.TYPE_MOTOR','nasabah.NO_POL','nasabah.KELURAHAN','penagihan.CREATED_AT')
+            $hasil_visit = SignNasabah::select('nasabah.TYPE_MOTOR','nasabah.NO_POL','nasabah.LATITUDE','nasabah.LONGITUDE','nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','penagihan.STATUS_VISIT as STATUS_VISIT','penagihan.STATUS_BAYAR as STATUS_BAYAR','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.KELURAHAN','penagihan.CREATED_AT')
                                   ->join('nasabah','nasabah.ID','=','sign_nasabah.ID_NASABAH')
                                   ->join('mitra','mitra.ID','=','nasabah.ID_MITRA')
                                   ->join('penagihan','penagihan.ID_NASABAH','=','nasabah.ID')
@@ -290,7 +290,7 @@ class UserController extends Controller
                                   ->where('sign_nasabah.ID_COLLECTOR','=',$user->id_collection)
                                   ->orderBy('CREATED_AT','DESC');
 
-            $hasil_visit_client = SignNasabah::select('nasabah.ID_MITRA','nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','penagihan.STATUS_VISIT as STATUS_VISIT','penagihan.STATUS_BAYAR as STATUS_BAYAR','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.TYPE_MOTOR','nasabah.NO_POL','nasabah.KELURAHAN','penagihan.CREATED_AT')
+            $hasil_visit_client = SignNasabah::select('nasabah.TYPE_MOTOR','nasabah.NO_POL','nasabah.LATITUDE','nasabah.LONGITUDE','nasabah.ID_MITRA','nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','penagihan.STATUS_VISIT as STATUS_VISIT','penagihan.STATUS_BAYAR as STATUS_BAYAR','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.KELURAHAN','penagihan.CREATED_AT')
                                   ->join('nasabah','nasabah.ID','=','sign_nasabah.ID_NASABAH')
                                   ->join('mitra','mitra.ID','=','nasabah.ID_MITRA')
                                   ->join('penagihan','penagihan.ID_NASABAH','=','nasabah.ID')
@@ -307,7 +307,7 @@ class UserController extends Controller
                                   ->where('sign_nasabah.ID_COLLECTOR','=',$user->id_collection)
                                   ->orderBy('CREATED_AT','DESC');
 
-            $hasil_visit_bayar_full = SignNasabah::select('nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','penagihan.STATUS_VISIT as STATUS_VISIT','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.TYPE_MOTOR','nasabah.NO_POL','nasabah.KELURAHAN','penagihan.CREATED_AT')
+            $hasil_visit_bayar_full = SignNasabah::select('nasabah.TYPE_MOTOR','nasabah.NO_POL','nasabah.LATITUDE','nasabah.LONGITUDE','nasabah.NAMA','nasabah.USER_ID','nasabah.TELEPHONE','nasabah.TELEPHONE','nasabah.ID','penagihan.STATUS_VISIT as STATUS_VISIT','mitra.NAMA as MITRA','nasabah.COMPANY','nasabah.KECAMATAN','nasabah.KELURAHAN','penagihan.CREATED_AT')
                                   ->join('nasabah','nasabah.ID','=','sign_nasabah.ID_NASABAH')
                                   ->join('mitra','mitra.ID','=','nasabah.ID_MITRA')
                                   ->join('penagihan','penagihan.ID_NASABAH','=','nasabah.ID')
@@ -354,6 +354,8 @@ class UserController extends Controller
                         stripos($cust->KELURAHAN, $keyword) !== false ||
                         stripos($cust->TYPE_MOTOR, $keyword) !== false ||
                         stripos($cust->NO_POL, $keyword) !== false ||
+                        stripos($cust->LATITUDE, $keyword) !== false ||
+                        stripos($cust->LONGITUDE, $keyword) !== false ||
                         stripos($cust->MITRA, $keyword) !== false  ) {
                         $status = 'found';                        
                         array_push($result, $cust);
@@ -368,9 +370,11 @@ class UserController extends Controller
                         stripos($cust->KECAMATAN, $keyword) !== false ||
                         stripos($cust->TYPE_CREDIT, $keyword) !== false ||
                         stripos($cust->COLL, $keyword) !== false ||
+                        stripos($cust->KELURAHAN, $keyword) !== false ||
                         stripos($cust->TYPE_MOTOR, $keyword) !== false ||
                         stripos($cust->NO_POL, $keyword) !== false ||
-                        stripos($cust->KELURAHAN, $keyword) !== false ||
+                        stripos($cust->LATITUDE, $keyword) !== false ||
+                        stripos($cust->LONGITUDE, $keyword) !== false ||
                         stripos($cust->MITRA, $keyword) !== false  ) {
                         $status = 'found';                        
                         array_push($result_client, $cust);
@@ -617,6 +621,8 @@ class UserController extends Controller
                         "VA_BCA" => $nasabah->VA_BCA,
                         "TYPE_MOTOR" => $nasabah->TYPE_MOTOR,
                         "NO_POL" => $nasabah->NO_POL,
+                        "LATITUDE" => $nasabah->LATITUDE,
+                        "LONGITUDE" => $nasabah->LONGITUDE,
                         "VA_MANDIRI" => $nasabah->VA_MANDIRI,
                         "VA_PERMATA" => $nasabah->VA_PERMATA,
                         "CREATED_BY"=> $nasabah->CREATED_BY,
