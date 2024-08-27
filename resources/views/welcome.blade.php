@@ -426,10 +426,10 @@
 
                         <div class="ml-12">
                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                FIELD COLLECTION API (1)
+                                COLLECTION API
                             </div>
                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                PT Koleksi Andalan Nusa &copy 2024.
+                                2024.
                             </div>
                         </div>
                     </div>
